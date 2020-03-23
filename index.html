@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Player</title>
+
+    <script src="https://kit.fontawesome.com/5a93d3e048.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/marquee.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+
+<style>
+    .card {
+        border-radius: 12px;
+        border: none;
+    }
+
+    .progress {
+        border-radius: 0;
+        height: 4px;
+    }
+
+    .progress>div {
+        height: 100%;
+        width: 0%;
+        background: #00bcd4;
+        transition: width 0.25s linear;
+    }
+
+    .card img {
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    h6 {
+        text-transform: uppercase;
+        letter-spacing: 0.2rem;
+        color: rgba(0, 0, 0, 0.5);
+    }
+
+    h5 {
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    .fade-ends {
+        position: relative;
+    }
+
+    .fade-ends::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: linear-gradient(to right, white, transparent 10%, transparent 90%, white);
+        z-index: 1;
+    }
+
+    #l-currentTime {
+        position: absolute;
+        left: 24px;
+    }
+
+    #l-finishTime {
+        position: absolute;
+        right: 24px;
+    }
+</style>
+
+<body>
+    <main class="vw-100 vh-100 d-flex align-items-center justify-content-center flex-column">
+        <h6 class="">Now playing</h6>
+        <marquee style="width:18rem;" class="fade-ends">
+            <h5 class="my-4">Yogi - [UNRELEASED]</h5>
+        </marquee>
+        <div class="card shadow-lg" style="width: 18rem;">
+            <!-- <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxIPEBUPDxIVFRUVFRUVFRUVFQ8VFRUVFRUWFhUVFRUYHSggGBolHRUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OFRAPFS0dHR0tLSstLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tKy0tLS0tLS0tLS0tLS0tLS0tK//AABEIALEBHAMBEQACEQEDEQH/xAAbAAEBAAIDAQAAAAAAAAAAAAAAAQUGAgMEB//EADgQAAIBAgQDBAgGAgIDAAAAAAABAgMRBAUxQSFRYQYSIrETMkJSYnGB0SORwcLh8FOhgtIUNHL/xAAbAQEBAAMBAQEAAAAAAAAAAAAAAQIDBQYEB//EADURAQACAAMFBwMDAgcBAAAAAAABAgMEEQUSITFREyJBYXGx4TKhwYGR8KLxBjNCUnKy0TT/2gAMAwEAAhEDEQA/ANkPrckArQGAzXKu7edNcNXFbdV9jZS+nCWFq6sOrxanBuMlxjJeT5p8jdMRaGuJmstlynNFXXdklGol4o7Ne9DmvLfa/wA9qzWW6JiY1hkTFVAoACgAAFCAAClQA8OKxF+C0N1KeMtV7eEPMbWsAAAAAABAABgEQQCAAqAQCAZhM+R9QBQAGEzbKtalJdZRXmvsbKX3WFq6sG1xUotqSd4yWsX0+xumItDXEzWWxZPmqrfh1LRqpabTXvQ/Vbf7PntXdbotEspcxVQKAAoAAEAKBSo8WKxN/CvqbaU8Zar28IeQ3NYAAXAtwJcAAAXAjAEAKAQCAQABAMufI+oAoFAAYfNsqvepTXHePPqupnS+6xtXVr8o6PimndNcHFrdcmfRwmGnjWWw5Pm3pLUqtlU2eiqJbrlLmvqunz3put9bRLLGCqAAoAIoAClR48XifZj9WbaU8Za728IeNG1qAAC5QAAUABAAAgBQCMABGBLgS4EIMufK+pQKAAoFAxObZX3/AB014t1738mdbTVjaurXpwvwd00+qaa3XJpn0cLQ08YlnMnzdzapVn4/ZloqnTpPpvquS+e9N1uraLMyYMlAAUAEUDyYvE+zH6m2lNeMtV7acIeI3NSgQAAAIC3AXKBAAjAALgLhRgcbgAJcCXIONwM5jMJLDvd09n7nR9PI8fsva2mmFjzw8J/9dvMZbXvU59HBHpnOUCgUAVFAxmaZYqnjhwl/qXz69TKtpqkxq1ypDWMlpqtGmvJn0RMTDTMTEsxlGbu6pV3xfCE37XKMuUuu/wA9dF6acY5N1bbzOGtkoAIoHlxWIt4Y6+RspTXjLXa2nCHhN7SqAAUCAAAAAAKBAYEuAuAuACpcCAQCMg4gfQ6tNSVmunP6fM/LHqGt47BPDu8eNP8APufLmvI7+y9q9nphY093wnp5T5e3t8eYy+/3q8/d1JnqtdXN0W4FAAUqKBjs1yxVV3o8Jrfn0ZlW01SYiWtVaWsJro0z6ImJhpmJiWUyjN3FqlXd0+EKj/1Gb58pb6Pjxem9NOMNtb6+rYDUzVBHmxWJtwWvkbKU14ywtbR4bm9pAAC4RbgQoXIBQuAuQUKgQCoBQIwIAbAgHG4EMbWisTa06RCxEzOkPVSwTkrnjc3/AIlxO1mMvEbsdY5+bsYWzqbsdpzb5/f4XXqeffe4VIJqz+X8Lp1KjW8wwToPvQV6b1S9nm4rdHc2ZtScHTDxeNfb4fLj5eL96vP3dMJppNNNPRrRnq4mJjWHNmNHIqFwKUW4RQPBmeXKsrrhJaP9H0LWZieCTETwlrFak03Ca46NP+8UfTW0TDTMaMhlObOlanWd4aRm/Z5Rm/d+Lbfmab4enGG2t9eE82bxOJtwWpjWuqWto8DZvaS4FKAC4QuBQIAAARAUKAAFwI2BAAEuAbIJckzERrPCFiJnhD35fgnJ3Z4PbW2JzM9lhT3I/q+Okfr6dzJ5Tso3rfV7M7TopK1ji0y1rxrro+5l7/39F16m1rH/AB/C6F0Hz/t/2ofiwOEl4tK1WPsL/HTfvc3t89PRbJ2V2mmNixw8I6/Hu+HM5mKd2ObSOz2dTy6Xo53lh2+MdXTb1lDpzj9Vx19PNdHxReL8+b6Rh68akFUpyUoyV4yXFNGKTGjtCKgBRQAR4syy+NaPKS0l+j5osTMTrCTGvNr0MDJzcZqyXrdfk9z6ItrDTMaSycIpJRXBJJJckuCQSeLkELgVMCXKKAAXAAAAAAAAARgQABAFwJckzor3YDBuTuzw229s9tM4ODPcjnPX493ayeU7Pv35+3yzblCjByk1FRV23sji5TLWxbRw1meUdX32tFYmZnSIaXmPamvOo3Rl3IaRXdi2+rutXyPd5bYuBXDiMaN63jxn9ocLF2jiTaez4Q+nX+38L7nhoh2mmdtu1bpXweFl+M1apUWlGL9mPxtflryO/snZU40xi4sd2OUdfh8WazMYcaRzaFSoqKsv5b5s9jEREaQ4lrTadZdeIoKSEwtbaOGS5vUy+duM6EneUN4v3ocn03NNq6PrraLRpL6Pg8VCtCNWlJSjJXTX94PoYExo7whcooRQPPisR3V12Mq11YWtoxspX4s3RwakuVACgLgLlAABWAAJgLgAAC4EuAuBAIAIAHswOEcndnitt7a7TXAwJ7vjPXyjy9/Tn2snlNzv35+3yzq7tKDlJpJK7b0SR5/LZe2LaOGuvKOroWtFY1mdIaJn+dSxUu7G6pRfhW8n70l5LY/Qdm7Orla71uN55+XlH56vPZzNzjTpXhWPv5/+MSdV8TfO2nal4Zf+NhmnXkuMuDVCL36zey+r2v4jZWy5zE9piR3I+/8APF38zmYw40jm+fUaXd5tttttttt8W23xb6ntK1isaQ4lrTadZdpkwRgdFeipLiSYZ1to6MqzKrl9RyheVKT8dP8AdHlLz0e1tNqvqpeLcJfR8vx1PEU1VpS70Zb8numtmuRgsxo9IRUUdOJxCguuyLWurC1tGLlNt3bN8Ro0zOqFRQAFAlwKUAAC4FQAAAuAAXAlwIAIJcBcD14LCubu9Dx+3Ns665fAnh/qnr5R5df2djJ5TTS944+EM9CMaUbtpWV23olu2zzOBgziTHDXpHV0pnSNZaP2hzt4mXcg2qSfDZzfvPpyX110/QNl7MjLV37/AFz9vKPzP6evAzucnFndr9Mff+eDDo674ADqhHi5SblKTcpSbu5SfFtvdmulK0rFaxpENt7zadZczNgtwCYQCuivRTRJhlW2jy5djquAqekpeKEvXp7SXNcpdTVavR9VLxMaS+j5XmNPFU1Voyunwa3i94yWzNazGjvxFdQXkZVjVha2jFTqOTuzfEaNEzq43AXKi3AoAABQFwAAC3AXAgABcBcKAQCXCFwr1YPCub46Hk9t7Z01y+BP/KfxH5/Z1cnlOWJePSPyz1Kmqa20u3surPKYWFOJP84uq0vtHnrxD9FSf4afF/5Hzfw8l9eR73ZWy4y8RiYkd/8A6/P9nBzuc7TuU+n3+GER23OUAB1XMWaphHIoAUIBXTVpJoixOjw4XF1cDV9NR0frwfqzXJ8nye35mq1X1UvE8Jbhgs0ji4+lg+jT1g/da/tzOumnBqvExPF6LmTBQLcBcABUwFyhcIAW4C4C4C4C4AKXCIFAAEA9ODwzm+h5fbe2ez1wMCePjPTyjz69PXl08nlNdMS8ekM9QpKC6+R4/Dw5vPk67UO0ee+mvRpP8NetL/I/+vme72TsrsIjFxY73hH+359nDzud7TXDw57vjPX49/RgTvOYAAJcDrMWaoClRyQAIoHGQV48TC6MZbKyxVDE1MLV9LS/5RfqyXJ/fY1zrE6w+msxaNJbzlWZ08TDv03xXCUXrF8n99zZW2rRek1ni91ysAAEUKAALcoBAAAuAAXAXCgACAAO/CYdzfQ83trbHYRODgz3/Genz7Ojk8pv9+/Lw8/hn8PRUF1PF0pN51nk7DVO0me+kvQovwaTkvb+FfD5/LX2+yNlRhRGNixx8I6ec+ft68uPns5va4eHPDxn8NeR6JyVAAQCEHWiM1QFuEUooAAwOmpEjKGOxVC5jMNtbPBQr1MNUVWk7NaraS3UlujXynWH0RMWjSW9ZPm0MVDvQ4SXrQesX+q5M2Vtq+a9JrLIJmTBQLcCAW4AqLcKALkAoAAFwAEAEHfhqDmzgbY2vGWicLCnvz/T8vvymU3+/fl7/DPYagoI8RFZxLaz+7tQ1ntLnvevQovhpUmt+cYvlzf0PZbH2TFYjGxY/wCMfmfx+7k57O88PDn1n8R+WtI9K46gCiNgLkECuCIzAioC3CLcAigBxkiDoqQIziXgxOHMZhsrZ4Kc50JqpSdpL8mt01umYTGnGH0RMTGkt4yXN4YqF14Zr14cuq5xNlbavnxMPd9GTuZNZcCpgAAFuAuAuAAXAALgAAHbh6Dm+hw9sbWjK17PDnvz9vP16R+vr92UynaTvW+n3Z7C0FBHhYi2LaZmfWXbiNOENe7S59a9CjLjpUmtucIvnze2ny9fsfZMaRjYscP9Mfmfx+7lZ3Oaa4eHPHxn8NXSPUOOpULgLgRkVLgQK4IxZKVFQFAtwhcBcCAcWgrqnAjKJeHEYcxmGytmPXfozVSm3GS0a8nzXQwmNG+tomNJbrkWcxxUberUS8Uf3R5ryNlbatOJh7voyhk1KgFwFwLcABbgS4BMC3AAAOzD0nNnH2ttWuUpu043nl5ec/h9mVys4s62+n3Z3CYdQWh4KZvjXmZnWZ5y7kRERpDCdpM97l6FF+LScl7Pwx+Ly+enqtj7Ji0Ri4sd3wjr5z5e/pz52dzm5rh0nj4z0+Wpo9Y4igAAACARsKgHFGLJQFyoAUChAAAYHFoK6pwIyiXhxFAkw2VljnGVOSnBuMou6a1RrmG+tteEtzyHO44mPdlaNRLxR2fxR6dNjZW2rTiYe7xjky1zJqW4C4FAAACAIoXIKmB2UaTk7HJ2ptOmTppHG88o/M/zi+vLZacWdZ5QzmEwygjwN7Xx7za06zPOXcrWKxpDEdo889FejSf4j9aS9hcl8Xkem2RsmMTTFxI7vhH+7493w53Odn3KfV7fLT0evcNyQQAMBcCXAjCgEA43MWQBQBUW4FuAABAABGgrpqRIyiXjxFAkw2VljZwlCSnBtSTumtUzXMN9beEtvyHPFiF3J2jVS4raSXtR+xsrbVqxMPd4xyZhMyalTAoC4RQqXCAFCuyjTcnZHN2ltGmTw9edp5R+Z8n05bLzi28mbweGUVc/P8TExMxiTa06zPOXdrWKxERyhje0Wd+hXoqT/Ea4v3E/3dPr8/Q7I2T2umJiR3I/q+P7Pizmb7KN2n1ezTer1/XdtnsYiIjSHCmdVKgAAALgS4VAIQQK4kZKELgUooRbgEAAqCKBLAcZIK6pwIyiXjr0LkmGyssbVpuLUotpp3TWqfNGEw31s2vIM8Ve1Orwqr6Ka5rrzX9WVba8JasTD04xyZu5saluQLgUBcBcDspU3J2Rz9obQw8nh708bTyjr8Poy+XnGt5eLN4LCqKuzwGNjYmZxJvedZl3aUikRWscHh7QZ0qC9HTs6jXzUFzfXkjt7J2V2079/oj7z09Or5c3m4wo3a/VP282lNtu7bbbu2+Lbe7PZ1rFYiIjSIcG0zM6yqMkUCXAXAXAARsCXIIFLgcCMlABFKLcCgAigAgAABXGSA6pxIyiXkxFEkw2RLG1qLTurprimuDTW6ZhMN9bNnyDPfS2pVnaps9FP7S6bmVbeEteJh6ca8meTM2lQIBbgc6VNydkfDn8/h5PD37cZnlHX46y34GBbFtpHLxlnMFhFFXZ+f5jMYuaxZvedZn7fDu4eHWlYrXk8mf5ysPHuxs6jXBbRXvS+252NlbLnHnetwpHOevlD581mowY0j6p/mrSpzcm5Sbbbu29W+Z7WtYrWK1jSIcG1ptMzM6zKGTFQAACMABADIqMCXAhVcTFVuAQAqOSAoFuELgAABAW4EYHFoK65xIsS8leiSYbIlja9G2hhMN1btjyDPe/ajWfj0jLafR/F5mVbeEsb4fjVsCZm0uVwOVKm5OyPkzucw8rhze/6R1ltwcG2LbSGcwOEUVdn5/ms1iZrFm951mftHR3sLDrh13aujPM4WGjZWdRrwx2S96XTzOnsvZk49tZ4VjnP4j+cGnNZmMGvnPJo1SpKcnObbk3dt7s9tSlaVitY0iHAtabTM2nWZEZsFYABcABLgLgLkVLlEZBCqlwONzFktwigCihFTAXAtwAQAoAoAAOLRFdU4hlEvLXo3JMM4ljMRQNcw3Vsz+Q55e1Gu/FpGb9rkpdeu/z1yrbwljfD8atmoxcnZGnN5vDyuHOJiT6R1nomFg2xbbtWdwODUVdngM5m8TN4s3v+kdI6O7hYVcOu7VwzrNo4aHOb9SP7pdD7tm7Mtj26RHOfxHm15nMVwa9ZnlDRq1aVSTnN3k3dv8Aux7fCwq4dYpSNIhwL3te02tOsy4GxrckBLgLgAJcAFLgQCALhUuBxCjMVEByCCKAQCuQRUBEEUCgCiAAIwQ4yIroqBlDxYgxltqx9c1y3VfUci9RfJeR5j/Ef+ZhekvtyH029Wxeyvn+jPO4X1OhDSO1f/tS/wDiHke72N/8lfWXC2h/nfpDEROq+GXIIoAAgIgAVAD0AjCiAgHFhQo//9k=" -->
+            <img src="img/itme.jpg" class="card-img-top" alt="...">
+            <div class="card-body p-0">
+                <div class="progress">
+                    <div id="progress-inner">
+                    </div>
+                </div>
+                <div class="p-3 d-flex justify-content-center align-items-center">
+                    <span id="l-currentTime">-:-</span>
+
+                    <span class="mx-1 rounded-circle d-flex align-items-center justify-content-center"
+                        style="width: 2.4rem; height: 2.4rem;">
+                        <i class="fa fa-step-backward"></i>
+                    </span>
+                    <span
+                        class="mx-1 rounded-circle d-flex align-items-center justify-content-center text-light shadow-sm"
+                        style="width: 2.4rem; height: 2.4rem; background: #00bcd4;" id="play-btn">
+                        <i class="fa fa-play"></i>
+                    </span>
+
+                    <span class="mx-1 rounded-circle d-flex align-items-center justify-content-center"
+                        style="width: 2.4rem; height: 2.4rem;">
+                        <i class="fa fa-step-forward"></i>
+                    </span>
+
+                    <span id="l-finishTime">-:-</span>
+                </div>
+            </div>
+        </div>
+        <audio id="audio" class="mt-4" src="/music/mixed.mp3">
+            Your browser does not support the
+            <code>audio</code> element.
+        </audio>
+    </main>
+</body>
+
+<script src="js/bootstrap.js"></script>
+
+<script>
+
+    let audioNode = document.getElementById('audio');
+
+    let currentTime = document.getElementById('l-currentTime');
+    let finishTime = document.getElementById('l-finishTime');
+
+    let progressBar = document.getElementById('progress-inner');
+
+    let playButton = document.getElementById('play-btn');
+
+    playButton.addEventListener('click', () => {
+        audioNode.play();
+    })
+
+    audioNode.addEventListener('durationchange', () => {
+        finishTime.innerHTML = formatTime(audioNode.duration);
+    });
+
+    audioNode.addEventListener('timeupdate', () => {
+        currentTime.innerHTML = formatTime(audioNode.currentTime);
+        progressBar.style.width = (audioNode.currentTime * 100 / audioNode.duration) + '%';
+    });
+
+    let audioContext = new AudioContext();
+
+    let audioSource = audioContext.createMediaElementSource(audioNode);
+    let audioAnalyser = audioContext.createAnalyser();
+
+    audioAnalyser.fftSize = 32;
+
+    audioSource.connect(audioAnalyser);
+    audioAnalyser.connect(audioContext.destination);
+
+    let frequencyResponse = new Float32Array(audioAnalyser.frequencyBinCount);
+
+    function draw() {
+        requestAnimationFrame(draw);
+        audioAnalyser.getFloatFrequencyData(frequencyResponse);
+        console.log(Math.pow(10, frequencyResponse[10]));
+    }
+    draw();
+
+    function formatTime(time) {
+        time = Math.round(time);
+
+        let minutes = Math.floor(time / 60);
+        let seconds = String(time % 60);
+
+        seconds = seconds.padStart(2, '0');
+
+        return minutes + ':' + seconds;
+    }
+
+</script>
+
+</html>
